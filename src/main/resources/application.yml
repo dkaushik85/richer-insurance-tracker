@@ -26,6 +26,10 @@ spring:
 richer:
  job:
   cron: 0/60 * * * * * 
+ upload:
+  service:
+   uri: http://localhost:8080
+   endpoint: /upload-vehicle-insurance
 logging:
  level:
   ROOT: info
