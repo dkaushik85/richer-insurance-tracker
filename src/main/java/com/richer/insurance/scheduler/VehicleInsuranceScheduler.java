@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,15 +17,16 @@ import com.richer.insurance.service.NotificationHandler;
 import com.richer.insurance.service.VehicleInsuranceFileHandler;
 import com.richer.insurance.service.VehicleInsuranceService;
 import com.richer.insurance.service.VehicleInsuranceUploadHandler;
-
+/*
+ * Scheduler for VehicleInsurance
+ */
 @Component
 public class VehicleInsuranceScheduler {
 
 	private static final Logger logger = LoggerFactory.getLogger(VehicleInsuranceScheduler.class);
 
 	public VehicleInsuranceScheduler() {
-		super();
-		// TODO Auto-generated constructor stub
+		super(); 
 	}
 
 	@Autowired

@@ -49,22 +49,4 @@ public class VehicleInsuranceService {
 	public void addVehicleInsurance(VehicleInsurance vehicleRecord) {
 		vehicleInsuranceRepository.save(vehicleRecord);
 	}
-
-	public void writeToCsv(List<VehicleDetailDTO> vehicleDetailDTOs) {
-
-		try {
-			Writer writer = Files.newBufferedWriter(Paths.get("./vehicle-insurace.csv"));
-
-			StatefulBeanToCsv<VehicleDetailDTO> beanToCsv = new StatefulBeanToCsvBuilder(writer)
-					.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).build();
-
-			beanToCsv.write(vehicleDetailDTOs);
-			
-			// closing the writer object 
-            writer.close();
-		} catch (Exception e) {
-			System.err.println("Error while csv " + e.getMessage());
-		}
-
-	}
 }

@@ -34,7 +34,7 @@ public class VehicleInsuranceFileHandler {
 			Writer writer = Files.newBufferedWriter(path);
 
 			StatefulBeanToCsv<VehicleDetailDTO> beanToCsv = new StatefulBeanToCsvBuilder(writer)
-					.withQuotechar(CSVWriter.DEFAULT_SEPARATOR).build();
+					.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).build();
 
 			beanToCsv.write(vehicleDetailDTOs);
 			writer.close();
