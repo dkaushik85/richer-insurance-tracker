@@ -1,0 +1,31 @@
+spring:
+  enable:
+   scheduling: true
+  datasource:
+    url: jdbc:h2:mem:testdb./database_that_does_not_exist;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    platform: h2
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximumPoolSize: 40
+      connectionTimeout: 1000
+      validationTimeout: 900
+  h2:
+   console:
+    enabled: true 
+    path: /h2-console     
+  jpa:
+   hibernate:
+    ddl-auto:create
+   properties:
+    hibernate:
+     show_sql: true
+     format_sql: true
+   show-sql: true
+richer:
+ job:
+  cron: 0/60 * * * * * 
+logging:
+ level:
+  ROOT: info
