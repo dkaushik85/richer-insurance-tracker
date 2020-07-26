@@ -1,16 +1,11 @@
 package com.richer.insurance.service;
 
-import java.util.List;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.richer.insurance.dto.VehicleDetailDTO;
 import com.richer.insurance.model.Vehicle;
 import com.richer.insurance.model.VehicleInsurance;
@@ -49,4 +44,6 @@ public class VehicleInsuranceService {
 	public void addVehicleInsurance(VehicleInsurance vehicleRecord) {
 		vehicleInsuranceRepository.save(vehicleRecord);
 	}
+
+	
 }

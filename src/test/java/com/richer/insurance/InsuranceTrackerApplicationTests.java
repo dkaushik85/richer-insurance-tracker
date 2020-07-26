@@ -2,7 +2,6 @@ package com.richer.insurance;
 
 import java.util.List;
 
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -50,7 +50,7 @@ public class VehicleInsuranceScheduler {
 	 * upload csv file to Webservice 5. Delete csv based on configuration.
 	 */
 	@Scheduled(cron = "${richer.job.cron}")
-	public void getAllVehicleDetails() {
+	public void performVehicleInsuranceTask() {
 		logger.info("Job Started !! ");
 		Path path = null;
 		HttpStatus uploadStatus = null;
