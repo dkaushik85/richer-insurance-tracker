@@ -16,6 +16,7 @@ import java.util.Random;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,12 +27,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.richer.insurance.dto.VehicleDetailDTO;
 import com.richer.insurance.model.Vehicle;
 import com.richer.insurance.model.VehicleInsurance;
-import com.richer.insurance.service.VehicleService;
+import com.richer.insurance.service.VehicleInsuranceService;
 
 @RestController
 public class VehicleController {
 	@Autowired
-	private VehicleService vehicleService;
+	private VehicleInsuranceService vehicleService; 
+
 
 	@RequestMapping("/")
 	public List<Vehicle> getAllVehicle() {
@@ -64,7 +66,7 @@ public class VehicleController {
 
 			byte[] bytes = file.getBytes();
 			Random random= new Random(); 
-			Path path = Paths.get("./uploaded-vehicle-insurace-"+random.nextLong()+".csv");
+			Path path = Paths.get("./uploaded-vehicle-insurance-"+random.nextLong()+".csv");
 			Files.write(path, bytes);
 			System.out.println(path.getFileName());
 

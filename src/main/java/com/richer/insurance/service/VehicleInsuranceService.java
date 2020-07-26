@@ -18,7 +18,7 @@ import com.richer.insurance.repository.VehicleInsuranceRepository;
 import com.richer.insurance.repository.VehicleRepository;
 
 @Service
-public class VehicleService {
+public class VehicleInsuranceService {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 

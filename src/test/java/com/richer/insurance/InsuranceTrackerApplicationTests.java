@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.richer.insurance.model.Vehicle;
-import com.richer.insurance.service.VehicleService;
+import com.richer.insurance.service.VehicleInsuranceService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={InsuranceTrackerApplication.class})
@@ -23,7 +23,7 @@ public class InsuranceTrackerApplicationTests {
 	}
 	
 	@Autowired
-	VehicleService service ;
+	VehicleInsuranceService service ;
 
 	@Test
 	public void testGetAllVehicles(){ 

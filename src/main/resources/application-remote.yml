@@ -32,7 +32,6 @@ richer:
    endpoint: /upload-vehicle-insurance
  writetocsv:
   filename: vehicle-insurance.csv
-  cleanup: true
 logging:
  level:
   ROOT: info

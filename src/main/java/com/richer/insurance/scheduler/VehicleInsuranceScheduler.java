@@ -1,25 +1,23 @@
 package com.richer.insurance.scheduler;
 
-import java.io.Writer;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource; 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.richer.insurance.dto.VehicleDetailDTO;
-import com.richer.insurance.service.VehicleService;
-import com.richer.insurance.upload.VehicleInsuranceUploader;
+import com.richer.insurance.exception.VehicleInsuranceException;
+import com.richer.insurance.service.NotificationHandler;
+import com.richer.insurance.service.VehicleInsuranceFileHandler;
+import com.richer.insurance.service.VehicleInsuranceService;
+import com.richer.insurance.service.VehicleInsuranceUploadHandler;
 
 @Component
 public class VehicleInsuranceScheduler {
@@ -32,48 +30,70 @@ public class VehicleInsuranceScheduler {
 	}
 
 	@Autowired
-	private VehicleService vehicleService;
+	private VehicleInsuranceService vehicleService;
 
 	@Autowired
-	private VehicleInsuranceUploader vehicleInsuranceUploader;
+	private VehicleInsuranceFileHandler fileHandler;
 
+	@Autowired
+	private VehicleInsuranceUploadHandler vehicleInsuranceUploader;
+
+	@Autowired
+	private NotificationHandler notificationHandler;
+
+	@Value("${richer.writetocsv.cleanup}")
+	boolean cleanupOnUpload;
+
+	/*
+	 * 1. Scheduled job executed based on configuration 2. Call to retrieve
+	 * Vehicle Details 3. Call to wrtie Vehicle Details to csv file 4. Call to
+	 * upload csv file to Webservice 5. Delete csv based on configuration.
+	 */
 	@Scheduled(cron = "${richer.job.cron}")
 	public void getAllVehicleDetails() {
 		logger.info("Job Started !! ");
+		Path path = null;
+		HttpStatus uploadStatus = null;
 		try {
+			//
+			// Call VehicleServive that return the VehicleDetailDTOs
+			//
 			List<VehicleDetailDTO> vehicleDetailDTOs = vehicleService.getAllVehicleDetails();
-			if (vehicleDetailDTOs != null)
-				writeToCsv(vehicleDetailDTOs);
-		} catch (Exception e) {
-			logger.error("Error : {} ", e.getMessage());
+
+			// check if VehicleDetailsDTOs has any records
+			if (vehicleDetailDTOs != null && !vehicleDetailDTOs.isEmpty()) {
+
+				// Call VehicleInsuranceFileHandler Service to write the
+				// VehicleDetailDTOs records to a csv file
+				// return a PATH where the local csv file written to
+				path = fileHandler.writeToCsv(vehicleDetailDTOs);
+				if (path != null) {
+
+					// Call VehicleInsuranceUploader Service to upload the csv
+					// file to WebService
+					uploadStatus = vehicleInsuranceUploader.postCsvToService(path);
+
+					// Check if csv file delete config
+					// Delete the file
+					if (uploadStatus.equals(HttpStatus.OK) && cleanupOnUpload) {
+						// Call VehicleInsuranceFileHandler Service to delete the csv file
+						fileHandler.cleanupFile(path);
+					}
+				}
+			} else {
+				logger.error("No VehicleInsurance to Upload");
+				new VehicleInsuranceException("NODATAFOUND-101", "No VehicleInsurance to Upload");
+			}
+		} catch (VehicleInsuranceException e) {
+			logger.error("VehicleInsuranceException code : {} errormessage : {} ", e.getErrorCode(), e);
 			e.printStackTrace();
+			notificationHandler.sendNotification();
+		} catch (Exception e) {
+			logger.error("Unexcpeted Error : {} ", e.getMessage());
+			e.printStackTrace();
+			notificationHandler.sendNotification();
 		}
 		logger.info("Job Ended !! ");
-	}
-
-	public void writeToCsv(List<VehicleDetailDTO> vehicleDetailDTOs) {
-		logger.info("Job started writeToCsv task");
-		try {
-			Random random = new Random();
-			Path path = Paths.get("./vehicle-insurace-" + random.nextLong() + ".csv");
-			Writer writer = Files.newBufferedWriter(path);
-
-			StatefulBeanToCsv<VehicleDetailDTO> beanToCsv = new StatefulBeanToCsvBuilder(writer)
-					.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).build();
-
-			beanToCsv.write(vehicleDetailDTOs);
-			writer.close();
-
-			logger.info("Job completed writeToCsv task");
-
-			FileSystemResource resource = new FileSystemResource(path);
-
-			vehicleInsuranceUploader.uploadCsvToService(resource);
-
-		} catch (Exception e) {
-			System.err.println("Error while csv " + e.getMessage());
-		}
-
 	}
 
 }
