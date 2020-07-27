@@ -1,8 +1,8 @@
 package com.richer.insurance.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class NotificationHandler {
 
 	public void sendNotification(){

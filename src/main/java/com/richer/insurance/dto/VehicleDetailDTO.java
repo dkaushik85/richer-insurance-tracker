@@ -2,11 +2,16 @@ package com.richer.insurance.dto;
 
 import java.util.Date;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class VehicleDetailDTO {
-	
+	@CsvBindByName(column = "Registration Number")
 	private String registrationNumber;
+	@CsvBindByName(column = "Policy Number")
 	private String policyNumber;
+	@CsvBindByName(column = "Start Date")
 	private Date startDate;
+	@CsvBindByName(column = "End Date")
 	private Date endDate;
 	
 

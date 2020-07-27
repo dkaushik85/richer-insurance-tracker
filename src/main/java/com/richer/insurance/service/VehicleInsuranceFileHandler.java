@@ -9,15 +9,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.richer.insurance.dto.VehicleDetailDTO;
 import com.richer.insurance.exception.VehicleInsuranceException;
 
-@Component
+@Service
 public class VehicleInsuranceFileHandler {
 	private static final Logger logger = LoggerFactory.getLogger(VehicleInsuranceFileHandler.class);
 
@@ -30,7 +31,8 @@ public class VehicleInsuranceFileHandler {
 		try {
 			path = Paths.get("./" + csvFileName);
 			Writer writer = Files.newBufferedWriter(path);
-
+	
+	        // suppress all quoting, map c
 			StatefulBeanToCsv<VehicleDetailDTO> beanToCsv = new StatefulBeanToCsvBuilder(writer)
 					.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).build();
 
