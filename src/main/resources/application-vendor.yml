@@ -22,7 +22,7 @@ spring:
     hibernate:
      show_sql: true
      format_sql: true
-   show-sql: true
+   show-sql: true 
 richer:
  job:
   cron: 0/60 * * * * * 
@@ -32,6 +32,7 @@ richer:
    endpoint: /upload-vehicle-insurance
  writetocsv:
   filename: vehicle-insurance.csv
+  cleanup: true
 logging:
  level:
   ROOT: info

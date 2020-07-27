@@ -29,14 +29,20 @@ public class VehicleInsuranceFileHandler {
 		logger.info("Job started writeToCsv task");
 		Path path = null;
 		try {
+			// build file path
 			path = Paths.get("./" + csvFileName);
+			
+			// create file writer
 			Writer writer = Files.newBufferedWriter(path);
 	
-	        // suppress all quoting, map c
+	        // suppress all quoting
 			StatefulBeanToCsv<VehicleDetailDTO> beanToCsv = new StatefulBeanToCsvBuilder(writer)
 					.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).build();
-
+			
+			// write Vehicle Details to csv
 			beanToCsv.write(vehicleDetailDTOs);
+			
+			// Close csv file
 			writer.close();
 
 			logger.info("Job completed writeToCsv task");

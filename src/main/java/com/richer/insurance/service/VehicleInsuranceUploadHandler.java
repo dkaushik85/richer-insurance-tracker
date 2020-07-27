@@ -41,19 +41,19 @@ public class VehicleInsuranceUploadHandler {
 		logger.info("Job started post csv task");
 		HttpStatus uploadStatus=null;
 		try {
+			// build File resource 
 			FileSystemResource resource = new FileSystemResource(filePath);
 			
 			//
-			// csv file contentType 
+			// set file contentType in header
 			//
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			
-			
+			// Build 
 			MultiValueMap<String, Object> fileContent = new LinkedMultiValueMap<>();
 			fileContent.add("file", resource);
-			
-			
+						
 			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(
 					fileContent, headers);
 	
@@ -63,6 +63,8 @@ public class VehicleInsuranceUploadHandler {
 			// POST request to endpoint
 			//
 			ResponseEntity<String> response = restTemplate.postForEntity(uploadFileUri+uploadFileEndpoint, request, String.class);
+			
+			// HTTP status 
 			uploadStatus=response.getStatusCode();
 			logger.info("Status Code : {}", uploadStatus);
 			logger.info("Job complated upload csv task");
